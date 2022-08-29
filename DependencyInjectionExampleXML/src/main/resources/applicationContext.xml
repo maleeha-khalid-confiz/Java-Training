@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd">
+        <bean id="indexService"  class="org.example.IndexService" />
+        <bean id="dbService"  class="org.example.DbService" />
+        <bean id="indexApp" class="org.example.IndexApp" >
+            <property name="service" ref="indexService" />
+        </bean>
+        <bean id="indexAppUsingDbService" class="org.example.IndexApp" >
+            <property name="service" ref="dbService" />
+        </bean>
+</beans> 
