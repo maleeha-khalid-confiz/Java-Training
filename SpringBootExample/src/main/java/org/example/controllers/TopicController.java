@@ -1,5 +1,10 @@
 package org.example.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +32,17 @@ public class TopicController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Operation(summary = "Get all the topics")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Found the topics",
+                    content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TopicDto.class)
+                    )})
+    })
     @RequestMapping("/topics")
-    public List<TopicDto> getAllTopics(){
+    public List<TopicDto> getAllTopics() {
 //        Map<String, String> map = topicService.getDbConnection();
 //        for (Map.Entry<String, String> item : map.entrySet()) {
 //            String key = item.getKey();
@@ -43,33 +57,34 @@ public class TopicController {
     }
 
     @RequestMapping("/topics/{id}")
-    public TopicDto getTopic(@PathVariable int id){
+    public TopicDto getTopic(@PathVariable int id) {
         Topic topic = topicService.getTopic(id);
         return convertToDto(topic);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/topics")
-    public void addTopic(@Valid @RequestBody TopicDto topicDto){
-        Topic topic =  convertToEntity(topicDto);
+    public void addTopic(@Valid @RequestBody TopicDto topicDto) {
+        Topic topic = convertToEntity(topicDto);
         topicService.addTopic(topic);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/topics")
-    public void updateTopic(@RequestBody TopicDto topicDto){
-        Topic topic =  convertToEntity(topicDto);
+    public void updateTopic(@RequestBody TopicDto topicDto) {
+        Topic topic = convertToEntity(topicDto);
         topicService.updateTopic(topic);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/topics/{id}")
-    public void deleteTopic(@PathVariable int id){
+    public void deleteTopic(@PathVariable int id) {
         topicService.deleteTopic(id);
     }
 
 
-    private TopicDto convertToDto(Topic topic){
+    private TopicDto convertToDto(Topic topic) {
         return modelMapper.map(topic, TopicDto.class);
     }
-    private Topic convertToEntity(TopicDto topicDto){
+
+    private Topic convertToEntity(TopicDto topicDto) {
         return modelMapper.map(topicDto, Topic.class);
     }
 }
